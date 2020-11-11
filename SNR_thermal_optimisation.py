@@ -23,16 +23,16 @@ rhoe = 1.68E-8              # copper resistivity in Ohm m
 
 
 # Sample dimensions
-#enter radius as 4cm and length as 10cm
+#enter diameter as 8cm and length as 10cm
 #results in sample volume of ~ 0.5L
-rs = (float(input('Enter sample radius (cm) - ')))/100
+Ds = (float(input('Enter sample diameter (cm) - ')))/100
 ls = (float(input('Enter sample length (cm) - ')))/100 
-N = (2*(np.pi)*(rs**2)*ls*rhow)/mw 
+N = (2*(np.pi)*(Ds**2)*ls*rhow)/(4*mw) 
 
 
 # Coil parameters
-Dc = (float(input('Enter coil diameter (cm) - ')))/100 
-#note this is inner diameter of coil
+#note this is the diameter of a 1 layer coil
+Dc = (float(input('Enter coil diameter (cm) - ')))/100
 Hc = (float(input('Enter coil height (cm) - ')))/100
 
 # list of numbers with given interval and range 
@@ -44,7 +44,7 @@ r1, r2 = 0.1, 1.15
 Dw = createList(r1,r2) 
 
 #Hence list of number of turns per layer
-Nc = np.reciprocal(Dw)*(10**3)*Hc 
+Nc = Hc/(Dw*(10**-3)) 
 
 
 # Other parameters
