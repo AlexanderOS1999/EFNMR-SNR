@@ -25,15 +25,15 @@ eta = 0.9                   # ratio of wire diameter to avg. distance
                             # between two adjacent windings
 
 # Sample dimensions
-#enter radius as 4cm and length as 10cm
+#enter diameter as 8cm and length as 10cm
 #results in sample volume of ~ 0.5L
-rs = (float(input('Enter sample radius (cm) - ')))/100
+Ds = (float(input('Enter sample diameter (cm) - ')))/100
 ls = (float(input('Enter sample length (cm) - ')))/100 
-N = (2*(np.pi)*(rs**2)*ls*rhow)/mw 
+N = (2*(np.pi)*(Ds**2)*ls*rhow)/(4*mw) 
 
 
 # Coil parameters
-#note this is inner diameter of coil
+#note this is the diameter of a 1 layer coil
 #convert to metres
 Dc = (float(input('Enter coil diameter (cm) - ')))/100 
 Hc = (float(input('Enter coil height (cm) - ')))/100
@@ -48,12 +48,12 @@ Dw = createList(r1,r2)
  
 #Hence list of number of turns per layer
 #convert Dw to m for correct calculation
-Nc = np.reciprocal(Dw)*(10**3)*Hc 
+Nc = Hc/(Dw*(10**-3)) 
 
 
 # Other parameters
 Bp = (float(input('Enter polarising field strength (mT) - ')))/1000
-
+print()
 
 # Calculations
 #constants
@@ -77,6 +77,7 @@ collective_Q = []
 collective_Va = []
 collective_SNRtot = []
 collective_Amp = []
+collective_Cap = []
 
 #for loop for each desirable value  
 #of the number of layers Nl from 1 to 10
@@ -89,13 +90,13 @@ for Nl in range(1,11):
     SNRc = SNR/(np.sqrt((2*np.pi)*((Hc**2)+(Dc**2)))) #corrected SNR
     #append the vector of SNRc values for a given Nl 
     #to the list of lists 
-    collective_SNRc.append(SNRc)
+    collective_SNRc.append(SNRc) #OVERESTIMATED?
     
     #repeat process for EMF
     n3 = perm*w0*N*(g**2)*(hbar**2)*Nc*Nl*Bp
     d3 = 4*KB*T*np.sqrt(((Hc**2)+(Dc**2)))
     V = (n3/d3)*(10**(6)) #Voltage induced in microvolts
-    collective_V.append(V)
+    collective_V.append(V) #OVERESTIMATED?
     
     #repeat process for DC resistance
     R = (4*rhoe*Dc*(Nc**3)*Nl)/((Hc**2))
@@ -118,7 +119,7 @@ for Nl in range(1,11):
     #F is the ratio of total resistance to DC resistance
     #it is a function of parameter A
     A = ((((np.pi)/4)**(3/4))*(Dw*(10**-3))*np.sqrt(eta))/delta
-    F = 1+((((5*(Nl**2))-1)*(A**4))/45)
+    F = 1+((((5*(Nl**2))-1)*(A**4))/45) #CORRECT EQUATION?
     #from below plots, infinite treatment is an overestimation of L
     #therefore use finite treatment in calculation     
     Q = (w0*L_fin)/(R*F)
@@ -143,9 +144,9 @@ for Nl in range(1,11):
     Amp = 20*np.log10((1/(Va*(10**-6))))
     collective_Amp.append(Amp)
     
-    ##repeat process for capacitance Cap
-    #Cap = L_fin/(((w0**2)*(L_fin**2))+(R**2))
-    
+    #repeat process for capacitance Cap
+    Cap = L_fin/(((w0**2)*(L_fin**2))+((R*F)**2))
+    collective_Cap.append(Cap)
 #having constructed the list of lists for e.g. SNRtot values 
 #for each given Nl, plot them
   
@@ -172,7 +173,7 @@ CSA = ((np.pi)*(Dw**2))/4 #in mm^2
 #    ax2.plot(Dw, collective_Vs[i])
 #ax2.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))    
 
-#repeat for resistance   
+#repeat for DC resistance   
 fig, ax3 = plt.subplots(1,1)
 ax3.set_ylabel('DC Resistance [Ω]',fontsize='x-large')
 ax3.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
@@ -244,4 +245,87 @@ ax10.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_SNRtot,axis=0)):
     ax10.plot(CSA, collective_Amp[i])
 ax10.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
-plt.show() 
+plt.show()
+
+# Optimisation
+#index of max Q for Nl=10
+index_of_maxQ = np.where(collective_Q[9] == max(collective_Q[9]))
+##uncomment this code below to verify that above function
+#indeed finds the index of the maximum in the array:
+#print('The index of max Q:', index_of_Qmax)
+#print(collective_Q[9][index_of_Qmax])
+
+#index of max total SNR for Nl=10
+index_of_maxSNRtot = np.where(collective_SNRtot[9] == max(collective_SNRtot[9]))
+#index of max multiplied EMF for Nl=10
+index_of_maxVa = np.where(collective_Va[9] == max(collective_Va[9]))
+
+print()
+print("For Nl = 10:")
+print()
+print("Maximum Q =",max(collective_Q[9]),"; at wire CSA =",CSA[index_of_maxQ],"mm^2")
+print("Maximum total SNR =",max(collective_SNRtot[9]),"dB; at wire CSA =",CSA[index_of_maxSNRtot],"mm^2")
+print("Maximum multiplied EMF =",max(collective_Va[9]),"μV; at wire CSA =",CSA[index_of_maxVa],"mm^2")
+print()
+# print("Note these will correspond to different values of wire diameter:")
+# #find the CSA at which Q max occurs 
+# print("Wire CSA at which maximum Q occurs =",CSA[index_of_maxQ],"mm^2")
+# #find the CSA at which max total SNR occurs 
+# print("Wire CSA at which maximum total SNR occurs =",CSA[index_of_maxSNRtot],"mm^2")
+# #find the CSA at which max multiplied EMF occurs
+# print("Wire CSA at which maximum multiplied EMF occurs =",CSA[index_of_maxVa],"mm^2")
+# print()
+print("Choose optimised CSA less than the CSA that gives rise to maximum Q,",CSA[index_of_maxQ],"mm^2, as the total SNR will still lie on a rough plateau around its maximum and the multiplied EMF will lie closer to its maximum. Also want to reduce Q somewhat as we do not want the circuit to be more resonant than the sample.")
+print()
+#Find SNRtot for CSA at which multiplied EMF occurs 
+print("Total SNR at which multiplied EMF is maximum =",collective_SNRtot[9][index_of_maxVa],"dB - too much of an appreciable drop from maximum.")
+print("Therefore, choose optimised CSA by finding the point on the plots where there is a compromise between the drops from the respective maxima.")
+print()
+
+
+# Calculate theoretical predictions for quantities
+#based on chosen wire size
+# I estimate this to be about 0.24 mm^2 
+# for our chosen dimensions earlier inputted
+optCSA = float(input('Enter chosen optimised CSA (mm^2) - '))
+print()
+#find closest index in CSA array to this
+#make new array containing difference between input and CSA values
+𝛿_CSA = np.absolute(CSA-optCSA)
+#index of optimised value for Nl=10
+index_of_optCSA = np.where(𝛿_CSA == min(𝛿_CSA))
+
+#coil specifications:
+#find optimised diameter in Dw array using above index
+print("Optimised coil specifications:")
+print("Wire diameter =",Dw[index_of_optCSA],"mm")
+#repeat for number of turns per layer
+print("Number of turns per layer =",Nc[index_of_optCSA])
+
+#calculate total length of wire needed for Nl=10
+#Create empty array of diameters for given layer Dl
+collective_Dl = []
+for Nl in range(1,11):
+    Dl = Dc+(2*(Nl-1)*(Dw[index_of_optCSA]*(10**-3)))
+    collective_Dl.append(Dl)
+#calculation accounts for variation in diameter for each layer    
+lw = Nc[index_of_optCSA]*np.pi*sum(collective_Dl)     
+print("Total length of wire required =",lw,"m")    
+print()
+
+print("Calculated theoretical predictions for quantities:")
+#repeat for DC resistance 
+print("DC resistance =",collective_R[9][index_of_optCSA],"Ω")
+#repeat for finite inductance 
+print("Finite inductance =",((10**3)*collective_L_fin[9][index_of_optCSA]),"mH")
+#calculate tuned capacitance based on above quantities 
+print("Therefore, tuned capacitance =",((10**(9))*collective_Cap[9][index_of_optCSA]),"nF")
+print()
+#repeat for quality factor
+print("Quality factor =",collective_Q[9][index_of_optCSA])
+#repeat for total SNR
+print("Total SNR =",collective_SNRtot[9][index_of_optCSA],"dB")
+#repeat for multiplied EMF 
+print("Multiplied EMF =",collective_Va[9][index_of_optCSA],"μV")
+#calculate amp factor based on this EMF 
+print("Amplification required for 1V =",collective_Amp[9][index_of_optCSA],"dB")
