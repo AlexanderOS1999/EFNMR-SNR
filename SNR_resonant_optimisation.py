@@ -80,9 +80,9 @@ collective_Amp = []
 collective_Cap = []
 
 #for loop for each desirable value  
-#of the number of layers Nl from 1 to 10
-#11 numbers i.e. 0-10, but don't count zero!
-for Nl in range(1,11):
+#of the number of layers Nl from 1 to 14
+#15 numbers i.e. 0-14, but don't count zero!
+for Nl in range(1,15):
     n2 = (np.sqrt(Nl))*Bp
     d2 = np.sqrt(Nc)
     p = n2/d2 #parameter
@@ -181,7 +181,7 @@ ax3.set_xlim(0.0, 1.0)
 ax3.set_ylim(0, 40)
 for i in range(np.size(collective_R,axis=0)):
     ax3.plot(CSA, collective_R[i])  
-ax3.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10')) 
+ax3.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14')) 
 
 ##uncomment this code below for infinite treatment:
 ###repeat for inductance of infinite solenoid   
@@ -200,7 +200,7 @@ ax5.set_xlim(0.0, 1.0)
 ax5.set_ylim(0, 150)
 for i in range(np.size(collective_L_fin,axis=0)):
     ax5.plot(CSA, ((10**3)*collective_L_fin[i]))
-ax5.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
+ax5.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 ##uncomment this code below for comparison of inductance treatments:
 ##fig, ax6 = plt.subplots(1,1)
@@ -217,7 +217,7 @@ ax7.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax7.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_Q,axis=0)):
     ax7.plot(CSA, collective_Q[i])
-ax7.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
+ax7.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 #repeat for multiplied EMF Va  
 fig, ax8 = plt.subplots(1,1)
@@ -226,7 +226,7 @@ ax8.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax8.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_Va,axis=0)):
     ax8.plot(CSA, collective_Va[i])
-ax8.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
+ax8.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 #repeat for total SNR 
 fig, ax9 = plt.subplots(1,1)
@@ -235,7 +235,7 @@ ax9.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax9.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_SNRtot,axis=0)):
     ax9.plot(CSA, collective_SNRtot[i])
-ax9.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
+ax9.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 #repeat for amplification factor required for 1V 
 fig, ax10 = plt.subplots(1,1)
@@ -244,7 +244,7 @@ ax10.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax10.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_SNRtot,axis=0)):
     ax10.plot(CSA, collective_Amp[i])
-ax10.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10'))
+ax10.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 plt.show()
 
 
