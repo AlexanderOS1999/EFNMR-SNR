@@ -40,9 +40,9 @@ Hc = (float(input('Enter coil height (cm) - ')))/100
 
 # list of numbers with given interval and range 
 def createList(r1, r2): 
-    return np.arange(r1, r2+0.01, 0.01)     
-#Functon generates list of diameter of wire in mm, 
-#range: 0.1-1.15mm,interval: 0.01mm 
+    return np.arange(r1, r2+0.005, 0.005)     
+#Function generates list of diameter of wire in mm, 
+#range: 0.1-1.15mm,interval: 0.005mm 
 r1, r2 = 0.1, 1.15
 Dw = createList(r1,r2) 
  
@@ -135,7 +135,7 @@ for Nl in range(1,15):
     #replace constant bandwidth b 
     #with one that depends on Q
     #convert to dB
-    SNRt = Q*SNRc*np.sqrt(((b*Q)/w0))
+    SNRt = SNRc*np.sqrt(((b*Q)/w0))
     SNRtot = 20*np.log10(SNRt)
     collective_SNRtot.append(SNRtot)
     
@@ -226,7 +226,7 @@ ax8.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax8.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_Va,axis=0)):
     ax8.plot(CSA, collective_Va[i])
-ax8.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
+#ax8.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 #repeat for total SNR 
 fig, ax9 = plt.subplots(1,1)
@@ -235,7 +235,7 @@ ax9.set_xlabel('Wire CSA [mm^2]',fontsize='x-large')
 ax9.set_xlim(0.0, 1.0)
 for i in range(np.size(collective_SNRtot,axis=0)):
     ax9.plot(CSA, collective_SNRtot[i])
-ax9.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
+#ax9.legend(('Nl = 1', 'Nl = 2', 'Nl = 3', 'Nl = 4', 'Nl = 5', 'Nl = 6', 'Nl = 7', 'Nl = 8', 'Nl = 9', 'Nl = 10', 'Nl = 11', 'Nl = 12', 'Nl = 13', 'Nl = 14'))
 
 #repeat for amplification factor required for 1V 
 fig, ax10 = plt.subplots(1,1)
